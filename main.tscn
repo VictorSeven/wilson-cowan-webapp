@@ -1,0 +1,129 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://main.gd" type="Script" id=2]
+[ext_resource path="res://main.gdshader" type="Shader" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 250, 250 )
+
+[sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
+shader = ExtResource( 3 )
+shader_param/wee = 8.8
+shader_param/wei = 8.4
+shader_param/wie = 6.7
+shader_param/wii = 5.0
+shader_param/thres_x = 0.07
+shader_param/gain_x = 5.0
+shader_param/thres_y = 0.05
+shader_param/gain_y = 3.0
+shader_param/noise_int_x = 0.1
+shader_param/noise_int_y = 0.6
+shader_param/diff = 1.0
+shader_param/is_mouse_pressed = false
+shader_param/exc_input = true
+shader_param/mouse_pos = Vector2( 0, 0 )
+
+[sub_resource type="ViewportTexture" id=3]
+viewport_path = NodePath("ViewportA")
+
+[node name="main" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="renderer" type="Sprite" parent="."]
+centered = false
+
+[node name="clickarea" type="Area2D" parent="renderer"]
+
+[node name="shape" type="CollisionShape2D" parent="renderer/clickarea"]
+shape = SubResource( 1 )
+
+[node name="ViewportA" type="Viewport" parent="."]
+size = Vector2( 600, 400 )
+handle_input_locally = false
+disable_3d = true
+usage = 0
+render_target_v_flip = true
+render_target_clear_mode = 1
+render_target_update_mode = 3
+
+[node name="ColorRect" type="ColorRect" parent="ViewportA"]
+material = SubResource( 2 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -600.0
+margin_bottom = -400.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+color = Color( 0, 0, 0.027451, 1 )
+
+[node name="camA" type="Camera2D" parent="ViewportA"]
+current = true
+
+[node name="ViewportB" type="Viewport" parent="."]
+size = Vector2( 600, 400 )
+handle_input_locally = false
+disable_3d = true
+usage = 0
+render_target_v_flip = true
+
+[node name="Sprite" type="Sprite" parent="ViewportB"]
+texture = SubResource( 3 )
+
+[node name="camB" type="Camera2D" parent="ViewportB"]
+current = true
+
+[node name="Panel" type="Panel" parent="."]
+modulate = Color( 1, 1, 1, 0.580392 )
+margin_left = 740.0
+margin_top = 10.0
+margin_right = 1020.0
+margin_bottom = 430.0
+rect_min_size = Vector2( 280, 420 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="close" type="Button" parent="Panel"]
+margin_left = 244.209
+margin_top = 10.0113
+margin_right = 264.209
+margin_bottom = 30.0113
+text = "X"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="margin" type="MarginContainer" parent="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+margin_top = 40.0
+margin_right = -142.0
+margin_bottom = -204.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="parlist" type="VBoxContainer" parent="Panel/margin"]
+margin_right = 200.0
+margin_bottom = 176.0
+rect_min_size = Vector2( 200, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="menu" type="Button" parent="."]
+visible = false
+margin_left = 940.0
+margin_top = 24.0
+margin_right = 988.0
+margin_bottom = 44.0
+text = "Menu"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="input_event" from="renderer/clickarea" to="." method="_on_clickarea_input_event"]
+[connection signal="pressed" from="Panel/close" to="." method="_on_close_pressed"]
+[connection signal="pressed" from="menu" to="." method="_on_menu_pressed"]
